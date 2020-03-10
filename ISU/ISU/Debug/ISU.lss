@@ -1,0 +1,446 @@
+
+ISU.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00800100  00000266  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000212  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  00000266  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000298  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000098  00000000  00000000  000002d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000e92  00000000  00000000  0000036c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000a12  00000000  00000000  000011fe  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000598  00000000  00000000  00001c10  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000110  00000000  00000000  000021a8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000595  00000000  00000000  000022b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000043a  00000000  00000000  0000284d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000068  00000000  00000000  00002c87  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	45 c0       	rjmp	.+138    	; 0x8c <__ctors_end>
+   2:	00 00       	nop
+   4:	4b c0       	rjmp	.+150    	; 0x9c <__bad_interrupt>
+   6:	00 00       	nop
+   8:	49 c0       	rjmp	.+146    	; 0x9c <__bad_interrupt>
+   a:	00 00       	nop
+   c:	47 c0       	rjmp	.+142    	; 0x9c <__bad_interrupt>
+   e:	00 00       	nop
+  10:	45 c0       	rjmp	.+138    	; 0x9c <__bad_interrupt>
+  12:	00 00       	nop
+  14:	43 c0       	rjmp	.+134    	; 0x9c <__bad_interrupt>
+  16:	00 00       	nop
+  18:	41 c0       	rjmp	.+130    	; 0x9c <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	3f c0       	rjmp	.+126    	; 0x9c <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	3d c0       	rjmp	.+122    	; 0x9c <__bad_interrupt>
+  22:	00 00       	nop
+  24:	3b c0       	rjmp	.+118    	; 0x9c <__bad_interrupt>
+  26:	00 00       	nop
+  28:	39 c0       	rjmp	.+114    	; 0x9c <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	37 c0       	rjmp	.+110    	; 0x9c <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	35 c0       	rjmp	.+106    	; 0x9c <__bad_interrupt>
+  32:	00 00       	nop
+  34:	33 c0       	rjmp	.+102    	; 0x9c <__bad_interrupt>
+  36:	00 00       	nop
+  38:	31 c0       	rjmp	.+98     	; 0x9c <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	2f c0       	rjmp	.+94     	; 0x9c <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	2d c0       	rjmp	.+90     	; 0x9c <__bad_interrupt>
+  42:	00 00       	nop
+  44:	2b c0       	rjmp	.+86     	; 0x9c <__bad_interrupt>
+  46:	00 00       	nop
+  48:	29 c0       	rjmp	.+82     	; 0x9c <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	27 c0       	rjmp	.+78     	; 0x9c <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	25 c0       	rjmp	.+74     	; 0x9c <__bad_interrupt>
+  52:	00 00       	nop
+  54:	23 c0       	rjmp	.+70     	; 0x9c <__bad_interrupt>
+  56:	00 00       	nop
+  58:	21 c0       	rjmp	.+66     	; 0x9c <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	1f c0       	rjmp	.+62     	; 0x9c <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	1d c0       	rjmp	.+58     	; 0x9c <__bad_interrupt>
+  62:	00 00       	nop
+  64:	1b c0       	rjmp	.+54     	; 0x9c <__bad_interrupt>
+  66:	00 00       	nop
+  68:	19 c0       	rjmp	.+50     	; 0x9c <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	17 c0       	rjmp	.+46     	; 0x9c <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	15 c0       	rjmp	.+42     	; 0x9c <__bad_interrupt>
+  72:	00 00       	nop
+  74:	13 c0       	rjmp	.+38     	; 0x9c <__bad_interrupt>
+  76:	00 00       	nop
+  78:	11 c0       	rjmp	.+34     	; 0x9c <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	0f c0       	rjmp	.+30     	; 0x9c <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	0d c0       	rjmp	.+26     	; 0x9c <__bad_interrupt>
+  82:	00 00       	nop
+  84:	0b c0       	rjmp	.+22     	; 0x9c <__bad_interrupt>
+  86:	00 00       	nop
+  88:	09 c0       	rjmp	.+18     	; 0x9c <__bad_interrupt>
+	...
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	ae d0       	rcall	.+348    	; 0x1f6 <main>
+  9a:	b9 c0       	rjmp	.+370    	; 0x20e <_exit>
+
+0000009c <__bad_interrupt>:
+  9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
+
+0000009e <_Z9port_initv>:
+void lcd_init(void);
+
+void port_init(void)
+{
+	//lcd1602
+	DDRC = 0xFF; //output
+  9e:	8f ef       	ldi	r24, 0xFF	; 255
+  a0:	84 bb       	out	0x14, r24	; 20
+	PORTC = 0x00;
+  a2:	15 ba       	out	0x15, r1	; 21
+  a4:	08 95       	ret
+
+000000a6 <_Z4initv>:
+	
+}
+
+void init()
+{
+	cli();
+  a6:	f8 94       	cli
+	port_init();
+  a8:	fa df       	rcall	.-12     	; 0x9e <_Z9port_initv>
+	lcd_init();
+  aa:	42 d0       	rcall	.+132    	; 0x130 <_Z8lcd_initv>
+  ac:	78 94       	sei
+	sei();
+  ae:	08 95       	ret
+
+000000b0 <_Z16write_first_halfh>:
+  b0:	ab 9a       	sbi	0x15, 3	; 21
+
+//старшая половина
+void write_first_half(unsigned char c) //функция вывода символов
+{
+	ENABLE_INPUT();			
+	PORTC = (PORTC & 0x0F) | (c & 0xF0);
+  b2:	95 b3       	in	r25, 0x15	; 21
+  b4:	9f 70       	andi	r25, 0x0F	; 15
+  b6:	80 7f       	andi	r24, 0xF0	; 240
+  b8:	89 2b       	or	r24, r25
+  ba:	85 bb       	out	0x15, r24	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  bc:	83 ec       	ldi	r24, 0xC3	; 195
+  be:	99 e0       	ldi	r25, 0x09	; 9
+  c0:	01 97       	sbiw	r24, 0x01	; 1
+  c2:	f1 f7       	brne	.-4      	; 0xc0 <_Z16write_first_halfh+0x10>
+  c4:	00 c0       	rjmp	.+0      	; 0xc6 <_Z16write_first_halfh+0x16>
+  c6:	00 00       	nop
+	_delay_ms(1);
+	DISABLE_INPUT();
+  c8:	ab 98       	cbi	0x15, 3	; 21
+  ca:	83 ec       	ldi	r24, 0xC3	; 195
+  cc:	99 e0       	ldi	r25, 0x09	; 9
+  ce:	01 97       	sbiw	r24, 0x01	; 1
+  d0:	f1 f7       	brne	.-4      	; 0xce <_Z16write_first_halfh+0x1e>
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <_Z16write_first_halfh+0x24>
+  d4:	00 00       	nop
+  d6:	08 95       	ret
+
+000000d8 <_Z17write_second_halfh>:
+}
+
+//младшая половина
+void write_second_half(unsigned char c) //функция вывода символов
+{
+	ENABLE_INPUT();
+  d8:	ab 9a       	sbi	0x15, 3	; 21
+	PORTC = (PORTC & 0x0F) | (c << 4);
+  da:	25 b3       	in	r18, 0x15	; 21
+  dc:	2f 70       	andi	r18, 0x0F	; 15
+  de:	30 e1       	ldi	r19, 0x10	; 16
+  e0:	83 9f       	mul	r24, r19
+  e2:	c0 01       	movw	r24, r0
+  e4:	11 24       	eor	r1, r1
+  e6:	82 2b       	or	r24, r18
+  e8:	85 bb       	out	0x15, r24	; 21
+  ea:	83 ec       	ldi	r24, 0xC3	; 195
+  ec:	99 e0       	ldi	r25, 0x09	; 9
+  ee:	01 97       	sbiw	r24, 0x01	; 1
+  f0:	f1 f7       	brne	.-4      	; 0xee <_Z17write_second_halfh+0x16>
+  f2:	00 c0       	rjmp	.+0      	; 0xf4 <_Z17write_second_halfh+0x1c>
+  f4:	00 00       	nop
+	_delay_ms(1);
+	DISABLE_INPUT();
+  f6:	ab 98       	cbi	0x15, 3	; 21
+  f8:	83 ec       	ldi	r24, 0xC3	; 195
+  fa:	99 e0       	ldi	r25, 0x09	; 9
+  fc:	01 97       	sbiw	r24, 0x01	; 1
+  fe:	f1 f7       	brne	.-4      	; 0xfc <_Z17write_second_halfh+0x24>
+ 100:	00 c0       	rjmp	.+0      	; 0x102 <_Z17write_second_halfh+0x2a>
+ 102:	00 00       	nop
+ 104:	08 95       	ret
+
+00000106 <_Z13write_commandh>:
+	arr[i] = '0' + i;
+	LCD_print(arr);
+}
+//отправить команду
+void write_command(unsigned char command) //функция управления
+{
+ 106:	cf 93       	push	r28
+ 108:	c8 2f       	mov	r28, r24
+	SET_COMMAND_OUTPUT();
+ 10a:	aa 98       	cbi	0x15, 2	; 21
+ 10c:	83 ec       	ldi	r24, 0xC3	; 195
+ 10e:	99 e0       	ldi	r25, 0x09	; 9
+ 110:	01 97       	sbiw	r24, 0x01	; 1
+ 112:	f1 f7       	brne	.-4      	; 0x110 <_Z13write_commandh+0xa>
+ 114:	00 c0       	rjmp	.+0      	; 0x116 <_Z13write_commandh+0x10>
+ 116:	00 00       	nop
+	_delay_ms(1);
+	write_first_half(command);
+ 118:	8c 2f       	mov	r24, r28
+ 11a:	ca df       	rcall	.-108    	; 0xb0 <_Z16write_first_halfh>
+	write_second_half(command);
+ 11c:	8c 2f       	mov	r24, r28
+ 11e:	dc df       	rcall	.-72     	; 0xd8 <_Z17write_second_halfh>
+ 120:	83 ec       	ldi	r24, 0xC3	; 195
+ 122:	99 e0       	ldi	r25, 0x09	; 9
+ 124:	01 97       	sbiw	r24, 0x01	; 1
+ 126:	f1 f7       	brne	.-4      	; 0x124 <_Z13write_commandh+0x1e>
+ 128:	00 c0       	rjmp	.+0      	; 0x12a <_Z13write_commandh+0x24>
+ 12a:	00 00       	nop
+	_delay_ms(1);
+}
+ 12c:	cf 91       	pop	r28
+ 12e:	08 95       	ret
+
+00000130 <_Z8lcd_initv>:
+ 130:	2f e9       	ldi	r18, 0x9F	; 159
+ 132:	86 e8       	ldi	r24, 0x86	; 134
+ 134:	91 e0       	ldi	r25, 0x01	; 1
+ 136:	21 50       	subi	r18, 0x01	; 1
+ 138:	80 40       	sbci	r24, 0x00	; 0
+ 13a:	90 40       	sbci	r25, 0x00	; 0
+ 13c:	e1 f7       	brne	.-8      	; 0x136 <_Z8lcd_initv+0x6>
+ 13e:	00 c0       	rjmp	.+0      	; 0x140 <_Z8lcd_initv+0x10>
+ 140:	00 00       	nop
+
+//init
+void lcd_init()
+{
+	_delay_ms(50);
+	write_command(0x30); //8 bit
+ 142:	80 e3       	ldi	r24, 0x30	; 48
+ 144:	e0 df       	rcall	.-64     	; 0x106 <_Z13write_commandh>
+	write_first_half(0x28); //4 bit, new cycle
+ 146:	88 e2       	ldi	r24, 0x28	; 40
+ 148:	b3 df       	rcall	.-154    	; 0xb0 <_Z16write_first_halfh>
+	write_command(0x08); //off
+ 14a:	88 e0       	ldi	r24, 0x08	; 8
+ 14c:	dc df       	rcall	.-72     	; 0x106 <_Z13write_commandh>
+	write_command(0x01); //clear, zero pos
+ 14e:	81 e0       	ldi	r24, 0x01	; 1
+ 150:	da df       	rcall	.-76     	; 0x106 <_Z13write_commandh>
+	write_command(0x06); //cursor -> on write
+ 152:	86 e0       	ldi	r24, 0x06	; 6
+ 154:	d8 df       	rcall	.-80     	; 0x106 <_Z13write_commandh>
+ 156:	8c e0       	ldi	r24, 0x0C	; 12
+	write_command(0x0C); //on, no cursor	
+ 158:	d6 cf       	rjmp	.-84     	; 0x106 <_Z13write_commandh>
+ 15a:	08 95       	ret
+
+0000015c <_Z10write_charh>:
+ 15c:	cf 93       	push	r28
+ 15e:	c8 2f       	mov	r28, r24
+}
+
+//отправить символ
+void write_char(unsigned char data)
+{
+	SET_DATA_OUTPUT();
+ 160:	aa 9a       	sbi	0x15, 2	; 21
+ 162:	83 ec       	ldi	r24, 0xC3	; 195
+ 164:	99 e0       	ldi	r25, 0x09	; 9
+ 166:	01 97       	sbiw	r24, 0x01	; 1
+ 168:	f1 f7       	brne	.-4      	; 0x166 <_Z10write_charh+0xa>
+ 16a:	00 c0       	rjmp	.+0      	; 0x16c <_Z10write_charh+0x10>
+ 16c:	00 00       	nop
+	_delay_ms(1);
+	write_first_half(data);
+ 16e:	8c 2f       	mov	r24, r28
+ 170:	9f df       	rcall	.-194    	; 0xb0 <_Z16write_first_halfh>
+	write_second_half(data);
+ 172:	8c 2f       	mov	r24, r28
+ 174:	b1 df       	rcall	.-158    	; 0xd8 <_Z17write_second_halfh>
+}
+ 176:	cf 91       	pop	r28
+ 178:	08 95       	ret
+
+0000017a <_Z9LCD_printPh>:
+	DISABLE_INPUT();
+	_delay_ms(1);
+}
+
+void LCD_print(uint8_t arr[16])
+{
+ 17a:	0f 93       	push	r16
+ 17c:	1f 93       	push	r17
+ 17e:	cf 93       	push	r28
+ 180:	df 93       	push	r29
+ 182:	8c 01       	movw	r16, r24
+ 184:	c1 e0       	ldi	r28, 0x01	; 1
+ 186:	d0 e0       	ldi	r29, 0x00	; 0
+ 188:	03 c0       	rjmp	.+6      	; 0x190 <_Z9LCD_printPh+0x16>
+ 18a:	21 96       	adiw	r28, 0x01	; 1
+ 18c:	0f 5f       	subi	r16, 0xFF	; 255
+ 18e:	1f 4f       	sbci	r17, 0xFF	; 255
+	for (int i=0; i<16; i++)
+	{
+		if(i==8) NEXT_ROW();
+ 190:	c9 30       	cpi	r28, 0x09	; 9
+ 192:	d1 05       	cpc	r29, r1
+ 194:	31 f4       	brne	.+12     	; 0x1a2 <_Z9LCD_printPh+0x28>
+ 196:	80 e0       	ldi	r24, 0x00	; 0
+ 198:	b6 df       	rcall	.-148    	; 0x106 <_Z13write_commandh>
+		write_char(arr[i]);
+ 19a:	f8 01       	movw	r30, r16
+ 19c:	80 81       	ld	r24, Z
+ 19e:	de df       	rcall	.-68     	; 0x15c <_Z10write_charh>
+ 1a0:	f4 cf       	rjmp	.-24     	; 0x18a <_Z9LCD_printPh+0x10>
+ 1a2:	f8 01       	movw	r30, r16
+ 1a4:	80 81       	ld	r24, Z
+ 1a6:	da df       	rcall	.-76     	; 0x15c <_Z10write_charh>
+	_delay_ms(1);
+}
+
+void LCD_print(uint8_t arr[16])
+{
+	for (int i=0; i<16; i++)
+ 1a8:	c0 31       	cpi	r28, 0x10	; 16
+ 1aa:	d1 05       	cpc	r29, r1
+ 1ac:	74 f3       	brlt	.-36     	; 0x18a <_Z9LCD_printPh+0x10>
+	{
+		if(i==8) NEXT_ROW();
+		write_char(arr[i]);
+	}
+ 1ae:	df 91       	pop	r29
+ 1b0:	cf 91       	pop	r28
+ 1b2:	1f 91       	pop	r17
+ 1b4:	0f 91       	pop	r16
+ 1b6:	08 95       	ret
+
+000001b8 <_Z13screen_outputv>:
+
+}
+
+//вывод на 1602
+void screen_output()
+{
+ 1b8:	cf 93       	push	r28
+ 1ba:	df 93       	push	r29
+ 1bc:	cd b7       	in	r28, 0x3d	; 61
+ 1be:	de b7       	in	r29, 0x3e	; 62
+ 1c0:	60 97       	sbiw	r28, 0x10	; 16
+ 1c2:	0f b6       	in	r0, 0x3f	; 63
+ 1c4:	f8 94       	cli
+ 1c6:	de bf       	out	0x3e, r29	; 62
+ 1c8:	0f be       	out	0x3f, r0	; 63
+ 1ca:	cd bf       	out	0x3d, r28	; 61
+	CLEAR_SCR();
+ 1cc:	81 e0       	ldi	r24, 0x01	; 1
+ 1ce:	9b df       	rcall	.-202    	; 0x106 <_Z13write_commandh>
+ 1d0:	fe 01       	movw	r30, r28
+ 1d2:	31 96       	adiw	r30, 0x01	; 1
+ 1d4:	80 e3       	ldi	r24, 0x30	; 48
+	unsigned char arr[16];
+	for (int i=0; i<16; i++)
+	arr[i] = '0' + i;
+ 1d6:	81 93       	st	Z+, r24
+ 1d8:	8f 5f       	subi	r24, 0xFF	; 255
+//вывод на 1602
+void screen_output()
+{
+	CLEAR_SCR();
+	unsigned char arr[16];
+	for (int i=0; i<16; i++)
+ 1da:	80 34       	cpi	r24, 0x40	; 64
+ 1dc:	e1 f7       	brne	.-8      	; 0x1d6 <_Z13screen_outputv+0x1e>
+	arr[i] = '0' + i;
+	LCD_print(arr);
+ 1de:	ce 01       	movw	r24, r28
+ 1e0:	01 96       	adiw	r24, 0x01	; 1
+ 1e2:	cb df       	rcall	.-106    	; 0x17a <_Z9LCD_printPh>
+}
+ 1e4:	60 96       	adiw	r28, 0x10	; 16
+ 1e6:	0f b6       	in	r0, 0x3f	; 63
+ 1e8:	f8 94       	cli
+ 1ea:	de bf       	out	0x3e, r29	; 62
+ 1ec:	0f be       	out	0x3f, r0	; 63
+ 1ee:	cd bf       	out	0x3d, r28	; 61
+ 1f0:	df 91       	pop	r29
+ 1f2:	cf 91       	pop	r28
+ 1f4:	08 95       	ret
+
+000001f6 <main>:
+void screen_output(void);
+//
+
+int main(void)
+{
+    init();
+ 1f6:	57 df       	rcall	.-338    	; 0xa6 <_Z4initv>
+    while (1) 
+    {
+		screen_output();
+ 1f8:	df df       	rcall	.-66     	; 0x1b8 <_Z13screen_outputv>
+ 1fa:	2f e3       	ldi	r18, 0x3F	; 63
+ 1fc:	8d e0       	ldi	r24, 0x0D	; 13
+ 1fe:	93 e0       	ldi	r25, 0x03	; 3
+ 200:	21 50       	subi	r18, 0x01	; 1
+ 202:	80 40       	sbci	r24, 0x00	; 0
+ 204:	90 40       	sbci	r25, 0x00	; 0
+ 206:	e1 f7       	brne	.-8      	; 0x200 <main+0xa>
+ 208:	00 c0       	rjmp	.+0      	; 0x20a <main+0x14>
+ 20a:	00 00       	nop
+ 20c:	f5 cf       	rjmp	.-22     	; 0x1f8 <main+0x2>
+
+0000020e <_exit>:
+ 20e:	f8 94       	cli
+
+00000210 <__stop_program>:
+ 210:	ff cf       	rjmp	.-2      	; 0x210 <__stop_program>
