@@ -6,27 +6,9 @@
  */ 
 
 #define F_CPU 10000000UL
-//pins
-//индикаторы активного реле
-#define MODE0_LED_PIN PA0
-#define MODE1_LED_PIN PA1
-#define MODE2_LED_PIN PA2
-
-//input buttons
-#define ENABLE_SWITCH_BTN_PIN PB0
-#define MENU_BTN_PIN		  PB1	
-#define UP_BTN_PIN			  PB2
-#define DOWN_BTN_PIN		  PB3
-#define PLUS_BTN_PIN		  PB4
-#define MINUS_BTN_PIN		  PB5
-//PWM
-#define HEATER_PWM_PIN	PC0
-#define FAN_PWM_PIN		PC1
-//sensors
-#define THERMISTOR_SENSOR_PIN	PF0
-#define FAN_SPEED_SENSOR_PIN	PF1
 
 #include <util/delay.h>
+#include <avr/io.h>
 
 //прототипы функций
 //init
@@ -34,14 +16,28 @@ void init(void);
 //LCD
 void screen_output(void);
 //
+void uart_send_char(void);
+uint16_t poll_adc();
+uint8_t poll_btns(void);
+void process_button(uint8_t falling_edges);
 
 int main(void)
 {
     init();
     while (1) 
     {
+		uint16_t adc0adc1 = poll_adc();
+		uint8_t falling_edges = poll_btns();
+		process_button(falling_edges);
+		if(falling_edges & 0b00100000)
+		PORTA^=0x01;
+		//if(falling_edges & 0x02)
+		//PORTA^=0x02;
+		//if(falling_edges & 0x04)
+		//PORTA^=0x04;
 		screen_output();
-		_delay_ms(100);
+		uart_send_char();
+		_delay_ms(10);
     }
 }
 
