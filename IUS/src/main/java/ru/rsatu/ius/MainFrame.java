@@ -27,21 +27,27 @@ public class MainFrame extends javax.swing.JFrame {
     
     public MainFrame() {
         initComponents();
-        JFrame jf =  new Chart(jPanel1);
+        JFrame jf =  new Chart(ChartPanel);
+        
+        ComLogger.init(ComLogTextArea);
         
         String[] l = SerialPortList.getPortNames();
-        for(String s:l)
+        for(String s:l){
+            ComPortComboBox.addItem(s);
             System.out.println(s);
-        serialPort = new SerialPort("COM3");
-        try {
-            serialPort.openPort();
-            serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-            serialPort.setEventsMask(SerialPort.MASK_RXCHAR);
-            serialPort.addEventListener(new EventListener());
+            ComLogger.logLine(s);
         }
-        catch (SerialPortException ex) {
-            System.out.println(ex);
-        }
+            
+//        serialPort = new SerialPort("COM3");
+//        try {
+//            serialPort.openPort();
+//            serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+//            serialPort.setEventsMask(SerialPort.MASK_RXCHAR);
+//            serialPort.addEventListener(new EventListener());
+//        }
+//        catch (SerialPortException ex) {
+//            System.out.println(ex);
+//        }
     }
 
     /**
@@ -53,40 +59,189 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        ChartPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ComLogTextArea = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        ComPortComboBox = new javax.swing.JComboBox<>();
+        KpTextField = new javax.swing.JTextField();
+        KiTextField = new javax.swing.JTextField();
+        KdTextField = new javax.swing.JTextField();
+        TargetTempTextField = new javax.swing.JTextField();
+        ShutdownTempTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        ApplyButton = new javax.swing.JButton();
+        PowerToggleButton = new javax.swing.JToggleButton();
+        RelayComboBox = new javax.swing.JComboBox<>();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        OpenMenuItem = new javax.swing.JMenu();
+        SaveMenuItem = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout ChartPanelLayout = new javax.swing.GroupLayout(ChartPanel);
+        ChartPanel.setLayout(ChartPanelLayout);
+        ChartPanelLayout.setHorizontalGroup(
+            ChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 520, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        ChartPanelLayout.setVerticalGroup(
+            ChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 291, Short.MAX_VALUE)
         );
+
+        ComLogTextArea.setEditable(false);
+        ComLogTextArea.setColumns(20);
+        ComLogTextArea.setRows(5);
+        jScrollPane1.setViewportView(ComLogTextArea);
+
+        KpTextField.setText("jTextField1");
+
+        KiTextField.setText("jTextField2");
+
+        KdTextField.setText("jTextField3");
+
+        TargetTempTextField.setText("jTextField4");
+
+        ShutdownTempTextField.setText("jTextField5");
+
+        jLabel1.setText("Kp");
+
+        jLabel2.setText("Ki");
+
+        jLabel3.setText("Kd");
+
+        jLabel4.setText("target temp");
+
+        jLabel6.setText("shutdown temp");
+
+        ApplyButton.setText("apply");
+        ApplyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApplyButtonActionPerformed(evt);
+            }
+        });
+
+        PowerToggleButton.setText("ВКЛ");
+        PowerToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PowerToggleButtonActionPerformed(evt);
+            }
+        });
+
+        RelayComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(PowerToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                            .addComponent(ComPortComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(KpTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(KiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(KdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(RelayComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(TargetTempTextField)
+                    .addComponent(ShutdownTempTextField)
+                    .addComponent(ApplyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ComPortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(KpTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TargetTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(KiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel6)
+                    .addComponent(ShutdownTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PowerToggleButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(KdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(ApplyButton)
+                    .addComponent(RelayComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        OpenMenuItem.setText("Open log");
+        jMenuBar1.add(OpenMenuItem);
+
+        SaveMenuItem.setText("Save log");
+        jMenuBar1.add(SaveMenuItem);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(418, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ApplyButtonActionPerformed
+
+    private void PowerToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PowerToggleButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PowerToggleButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,22 +278,29 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     
-      static class EventListener implements SerialPortEventListener {
-
-        public void serialEvent(SerialPortEvent event) {
-            if(event.isRXCHAR() && event.getEventValue()>=1){
-                try {
-                    String buffer = serialPort.readString(1);
-                    System.out.println(buffer);
-                }
-                catch (SerialPortException ex) {
-                    System.out.println(ex);
-                }
-            }
-        }
-     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton ApplyButton;
+    private javax.swing.JPanel ChartPanel;
+    private javax.swing.JTextArea ComLogTextArea;
+    private javax.swing.JComboBox<String> ComPortComboBox;
+    private javax.swing.JTextField KdTextField;
+    private javax.swing.JTextField KiTextField;
+    private javax.swing.JTextField KpTextField;
+    private javax.swing.JMenu OpenMenuItem;
+    private javax.swing.JToggleButton PowerToggleButton;
+    private javax.swing.JComboBox<String> RelayComboBox;
+    private javax.swing.JMenu SaveMenuItem;
+    private javax.swing.JTextField ShutdownTempTextField;
+    private javax.swing.JTextField TargetTempTextField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
