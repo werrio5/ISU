@@ -167,6 +167,9 @@
     <Compile Include="LCD1602.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="leds.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>

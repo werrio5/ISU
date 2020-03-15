@@ -20,23 +20,36 @@ void uart_send_char(void);
 uint16_t poll_adc();
 uint8_t poll_btns(void);
 void process_button(uint8_t falling_edges);
+void led_output(void);
+void read_sensors(void);
+void pwm_output(void);	
 
 int main(void)
 {
     init();
     while (1) 
     {
-		uint16_t adc0adc1 = poll_adc();
+		//sensors
+		read_sensors();
+		
+		//PWM
+		pwm_output();	
+			
+		//buttons input
 		uint8_t falling_edges = poll_btns();
+		//buttons processing
 		process_button(falling_edges);
-		if(falling_edges & 0b00100000)
-		PORTA^=0x01;
-		//if(falling_edges & 0x02)
-		//PORTA^=0x02;
-		//if(falling_edges & 0x04)
-		//PORTA^=0x04;
-		screen_output();
+		
+		//UART
+		//message_exchange();
 		uart_send_char();
+		
+		//LEDs
+		led_output();
+		
+		//LCD
+		screen_output();		
+			
 		_delay_ms(10);
     }
 }

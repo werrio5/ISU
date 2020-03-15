@@ -10,6 +10,8 @@ init.cpp
 
 LCD1602.cpp
 
+leds.cpp
+
 main.cpp
 
 menu.cpp

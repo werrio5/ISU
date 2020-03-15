@@ -25,7 +25,7 @@ const uint8_t menu[6][16] = {
 	{'K','p',' ',' ',' ',' ',' ',' ',' ', ' ',' ',' ',' ','1','/','6'},
 	{'K','i',' ',' ',' ',' ',' ',' ',' ', ' ',' ',' ',' ','2','/','6'},
 	{'K','d',' ',' ',' ',' ',' ',' ',' ', ' ',' ',' ',' ','3','/','6'},
-	{'t','(','t','a','r','r','g','e','t', ')',' ',' ',' ','4','/','6'},
+	{'t','(','t','a','r','g','e','t', ')',' ',' ',' ',' ','4','/','6'},
 	{'t','(','s','h','u','t','d','o','w', 'n',')',' ',' ','5','/','6'},
 	{'s','w','i','t','c','h',' ','r','e', 'l','a','y',' ','6','/','6'},
 };
@@ -52,6 +52,9 @@ float get_Ki(void);
 float get_Kd(void);
 uint8_t get_shutdown_temp(void);
 uint8_t get_active_relay(void);
+uint8_t get_power_enabled(void);
+void enable_power(void);
+void disable_power(void);
 
 void set_Kp(float kp);
 void set_Ki(float ki);
@@ -71,6 +74,8 @@ uint8_t back_btn_action;
 uint8_t select_btn_action;
 uint8_t up_btn_action;
 uint8_t down_btn_action;
+//const action
+uint8_t power_btn_action;
 //позиция в меню
 uint8_t menu_pos;
 
@@ -103,6 +108,7 @@ float f_source_value;   //значение
 #define BTN_ACTION_ACCEPT_VALUE 9
 //еще
 #define  BTN_ACTION_NO_ACTION 10
+#define  BTN_ACTION_POWER_SWITCH 11
 
 //типы страницы
 #define MAIN_PAGE 0
@@ -116,6 +122,7 @@ void menu_init(void)
 	set_template_screen(MAIN_SCREEN);
 	page_type = MAIN_PAGE;
 	set_button_actions(page_type);	
+	power_btn_action = BTN_ACTION_POWER_SWITCH;
 	insert_data();
 }
 
@@ -129,9 +136,9 @@ void insert_data(void)
 			//uint8_t MAIN_SCREEN[32] = {'t','=','*','*','*','/','*','*','*',' ','@','=','*','*','*','*',
 			//						     'P','=','*','*','*','I','=','*','*','*','D','=','*','*','*',' '};
 			uint8_t t = get_cur_temp();
-			cur_screen[2] = (t/100) + '0';
-			cur_screen[3] = (t/10) + '0';
-			cur_screen[4] = (t/1) + '0';
+			cur_screen[2] = ((int)t%1000)/100 + '0';
+			cur_screen[3] = ((int)t%100)/10 + '0';
+			cur_screen[4] = ((int)t%10) + '0';
 			t = get_target_temp();
 			cur_screen[6] = (t/100) + '0';
 			cur_screen[7] = ((t%100)/10) + '0';
@@ -143,16 +150,16 @@ void insert_data(void)
 			cur_screen[15] = ((int)f%10) + '0';
 			f = get_Kp();
 			cur_screen[18] = ((int)f) + '0';
-			cur_screen[19] = ((int)(10 * f) %10) + '0';
-			cur_screen[20] = ((int)(100 * f) %10) + '0';
+			cur_screen[19] = '.';
+			cur_screen[20] = ((int)(10 * f) %10) + '0';			
 			f = get_Ki();
 			cur_screen[23] = ((int)f) + '0';
-			cur_screen[24] = ((int)(10 * f) %10) + '0';
-			cur_screen[25] = ((int)(100 * f) %10) + '0';
+			cur_screen[24] = '.';
+			cur_screen[25] = ((int)(10 * f) %10) + '0';	
 			f = get_Kd();
 			cur_screen[28] = ((int)f) + '0';
-			cur_screen[29] = ((int)(10 * f) %10) + '0';
-			cur_screen[30] = ((int)(100 * f) %10) + '0';			
+			cur_screen[29] = '.';
+			cur_screen[30] = ((int)(10 * f) %10) + '0';				
 			break;
 		}		
 			
@@ -329,7 +336,11 @@ void process_button(uint8_t falling_edges)
 	{
 		if(0x01 & (falling_edges>>i))
 			switch(i)
-			{
+			{		
+				case ENABLE_SWITCH_BTN_PIN:
+					perform_action(power_btn_action);
+				break;
+				
 				case MENU_BTN_PIN:
 					perform_action(menu_btn_action);
 					break;
@@ -451,23 +462,64 @@ void perform_action(uint8_t action)
 		case BTN_ACTION_VALUE_DEC:
 		if(float_value)
 		{
-			f_source_value -= pow(10,(-2 - (cur_pos - end_pos)));
+			float dec_value = pow(10,(-2 - (cur_pos - end_pos)));
+			if(f_source_value - dec_value > 0)
+				f_source_value -= dec_value;
+			else
+				f_source_value = 0.0;
 		}
 		else
 		{
-			i_source_value -= pow(10,(end_pos - cur_pos));
+			if(menu_pos!=5)
+			{
+				uint8_t dec_value = pow(10,(end_pos - cur_pos));
+				if(i_source_value - dec_value > 0)
+					i_source_value -= dec_value;
+				else
+					i_source_value = 0;
+			}			
+			//select relay
+			else
+			{
+				if(i_source_value==1)
+					i_source_value = 3;
+				else
+					i_source_value--;
+				
+			}
 		}
+		insert_data();
 		break;
 		//увеличить значение в выбранном разряде на 1
 		case BTN_ACTION_VALUE_INC:
 		if(float_value)
 		{
-			f_source_value += pow(10,(-2 - (cur_pos - end_pos)));
+			float add_value = pow(10,(-2 - (cur_pos - end_pos)));
+			if(f_source_value + add_value < 10)
+				f_source_value += add_value;
+			else 
+				f_source_value = 9.99;
 		}
 		else
 		{
-			i_source_value += pow(10,(end_pos - cur_pos));
+			//others
+			if(menu_pos!=5)
+			{
+				uint8_t add_value = pow(10,(end_pos - cur_pos));
+				if(i_source_value + add_value < 256)
+					i_source_value += add_value;
+				else
+					i_source_value = 255;
+			}			
+			//select relay
+			else
+			{
+				i_source_value++;
+				if(i_source_value>3)
+					i_source_value = 1;
+			}
 		}
+		insert_data();
 		break;
 		//открыть страницу ввода выбранного параметра
 		case BTN_ACTION_OPEN_INPUT:
@@ -476,11 +528,20 @@ void perform_action(uint8_t action)
 			set_button_actions(page_type);
 			insert_data();
 		break;
+		case BTN_ACTION_POWER_SWITCH:
+			if(get_power_enabled()==0xFF)
+				disable_power();
+			else 
+				enable_power();
+		break;
 	}
 }
 
 uint8_t* get_cur_screen(void)
 {
+	insert_data();
+	if(is_edit_enabled)
+		set_cursor_pos(cur_pos);
 	return cur_screen;
 }
 

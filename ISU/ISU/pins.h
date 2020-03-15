@@ -14,6 +14,7 @@
 #define MODE0_LED_PIN PA0
 #define MODE1_LED_PIN PA1
 #define MODE2_LED_PIN PA2
+#define POWER_LED_PIN PA3
 //input buttons
 #define ENABLE_SWITCH_BTN_PIN PD0
 #define MENU_BTN_PIN		  PD1
@@ -23,8 +24,8 @@
 #define BACK_BTN_PIN		  PD5
 #define BTN_INPUT_PORT		  PIND 
 //PWM
-#define HEATER_PWM_PIN	PC0
-#define FAN_PWM_PIN		PC1
+#define HEATER_PWM_PIN	PB5
+#define FAN_PWM_PIN		PB6
 //LCD1602
 #define D7 PC7
 #define D6 PC6
@@ -45,7 +46,7 @@
 #define LCD_PORT_DDR DDRC
 #define BTN_PORT_DDR DDRD
 #define ADC_PORT_DDR DDRF
-#define PWM_PORT_DDR DDRC
+#define PWM_PORT_DDR DDRB
 #define LED_PORT_DDR DDRA
 
 #endif /* PINS_H_ */

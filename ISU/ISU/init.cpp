@@ -12,6 +12,8 @@ void lcd_init(void);
 void uart_init(void);
 void adc_init(void);
 void btninput_init(void);
+void led_init(void);
+void timer_init(void);
 
 void port_init(void)
 {
@@ -30,8 +32,8 @@ void port_init(void)
 	PWM_PORT_DDR |= (1<<HEATER_PWM_PIN) | (1<<FAN_PWM_PIN);
 	PWM_PORT &= ~(1<<HEATER_PWM_PIN) & ~(1<<FAN_PWM_PIN);
 	//led
-	LED_PORT_DDR |= (1<<MODE0_LED_PIN) | (1<<MODE1_LED_PIN) | (1<<MODE2_LED_PIN);
-	LED_PORT &= ~(1<<MODE0_LED_PIN) & ~(1<<MODE1_LED_PIN) & ~(1<<MODE2_LED_PIN);
+	LED_PORT_DDR |= (1<<MODE0_LED_PIN) | (1<<MODE1_LED_PIN) | (1<<MODE2_LED_PIN) | (1<<POWER_LED_PIN);
+	LED_PORT &= ~(1<<MODE0_LED_PIN) & ~(1<<MODE1_LED_PIN) & ~(1<<MODE2_LED_PIN) & ~(1<<POWER_LED_PIN);
 }
 
 void init()
@@ -41,6 +43,8 @@ void init()
 	uart_init();
 	adc_init();
 	data_init();
+	led_init();
 	lcd_init();
+	timer_init();
 	sei();
 }

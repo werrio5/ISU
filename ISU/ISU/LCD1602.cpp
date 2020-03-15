@@ -31,6 +31,8 @@ unsigned char arr_prev[32];
 //init
 void lcd_init()
 {
+	menu_init();
+	
 	_delay_ms(50);
 	//write_command(0x30); //8 bit
 	write_first_half(0x28); //4 bit, new cycle
@@ -42,9 +44,6 @@ void lcd_init()
 	
 	for (int i=0; i<32; i++)
 	arr_prev[i] = 0x00;	
-	
-	menu_init();
-
 }
 
 //вывод на 1602

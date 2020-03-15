@@ -51,11 +51,13 @@ ISR(USART0_RX_vect)
  }
 
  void uart_send_char() {
- if(accepted_char!=0x00)
-	 {
-		 // ожидаем доступности регистра для записи
-		 while (!(UCSR0A & (1<<UDRE0))) ;
-		 UDR0 = accepted_char; // записываем данные в регистр
-		 accepted_char = 0x00;
-	 }	 
+ //if(accepted_char!=0x00)
+	 //{
+		 //// ожидаем доступности регистра для записи
+		 //while (!(UCSR0A & (1<<UDRE0))) ;
+		 //UDR0 = accepted_char; // записываем данные в регистр
+		 //accepted_char = 0x00;
+	 //}	 
+	 while (!(UCSR0A & (1<<UDRE0))) ;
+	 UDR0 = '4'; // записываем данные в регистр
  }

@@ -5,11 +5,16 @@
  *  Author: самвел
  */ 
 
-
+#define F_CPU 10000000UL
  #include <avr/io.h>
+  #include <util/delay.h>
  #include "pins.h"
  
  uint8_t read_ADC(uint8_t pin);
+ uint8_t calc_temp_value(uint8_t temp_v);
+ float calc_fan_speed(uint8_t fan_s);
+ void set_cur_temp(uint8_t t);
+ void set_fan_speed(float fs);
 
 void adc_init(void)
 {
@@ -32,11 +37,34 @@ uint16_t poll_adc(void)
 }
 
 //чтение значения с ацп
-uint8_t read_ADC(uint8_t pin)
+uint8_t read_ADC(uint8_t channel)
 {
 	//select pin
- 	uint8_t mask = 0b11111000;
- 	ADMUX &= mask;
- 	ADMUX |= pin;
+ 	ADMUX = (ADMUX & 0xE0) | (channel & 0x1F);
+	 _delay_us(500);
+	// wait until ADC conversion is complete
 	return (uint8_t)ADCH; 
+}
+
+void read_sensors(void)
+{
+	uint8_t temp_v = read_ADC(0);
+	uint8_t cur_temp = calc_temp_value(temp_v);
+	set_cur_temp(cur_temp);
+
+				
+	uint8_t fan_s = read_ADC(1);
+	float cur_rpm = calc_fan_speed(fan_s);
+	set_fan_speed(cur_rpm);
+}
+
+uint8_t calc_temp_value(uint8_t temp_v)
+{
+	uint8_t t = temp_v;
+	return t;
+}
+
+float calc_fan_speed(uint8_t fan_s)
+{
+	return (float) fan_s;
 }
