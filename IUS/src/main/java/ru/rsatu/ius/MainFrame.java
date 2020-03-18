@@ -5,7 +5,10 @@
  */
 package ru.rsatu.ius;
 
+import java.awt.event.ItemEvent;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
@@ -27,9 +30,28 @@ public class MainFrame extends javax.swing.JFrame {
     
     public MainFrame() {
         initComponents();
+        //параметры
+        ParamsStorage.init();
+        KpTextField.setText(String.valueOf(ParamsStorage.getKp()));
+        KiTextField.setText(String.valueOf(ParamsStorage.getKi()));
+        KdTextField.setText(String.valueOf(ParamsStorage.getKd()));
+        RelayComboBox.setSelectedItem(String.valueOf(ParamsStorage.getActive_relay()));
+        ShutdownTempTextField.setText(String.valueOf(ParamsStorage.getShutdown_temp()));
+        TargetTempTextField.setText(String.valueOf(ParamsStorage.getTarget_temp()));
+        //график
         JFrame jf =  new Chart(ChartPanel);
-        
+        //логгер
         ComLogger.init(ComLogTextArea);
+        //обработчик команд
+        CommandParser.init();
+        
+        
+        
+        try {
+            ComTranciever.openPort("COM3");
+        } catch (SerialPortException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         String[] l = SerialPortList.getPortNames();
         for(String s:l){
@@ -99,6 +121,12 @@ public class MainFrame extends javax.swing.JFrame {
         ComLogTextArea.setRows(5);
         jScrollPane1.setViewportView(ComLogTextArea);
 
+        ComPortComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ComPortComboBoxItemStateChanged(evt);
+            }
+        });
+
         KpTextField.setText("jTextField1");
 
         KiTextField.setText("jTextField2");
@@ -134,6 +162,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         RelayComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+        RelayComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                RelayComboBoxItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -183,12 +216,13 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(KiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
-                    .addComponent(ShutdownTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PowerToggleButton))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(KiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(ShutdownTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(PowerToggleButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(KdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,11 +271,28 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void ApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyButtonActionPerformed
         // TODO add your handling code here:
+        //проверка ввода
+        //отправка команд на передачу измененных параметров
+        System.out.println("test changed");
     }//GEN-LAST:event_ApplyButtonActionPerformed
 
     private void PowerToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PowerToggleButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PowerToggleButtonActionPerformed
+
+    private void ComPortComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComPortComboBoxItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == ItemEvent.DESELECTED){
+            System.out.println(ComPortComboBox.getSelectedItem());
+        }
+    }//GEN-LAST:event_ComPortComboBoxItemStateChanged
+
+    private void RelayComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_RelayComboBoxItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == ItemEvent.DESELECTED){
+            System.out.println(RelayComboBox.getSelectedItem());
+        }
+    }//GEN-LAST:event_RelayComboBoxItemStateChanged
 
     /**
      * @param args the command line arguments

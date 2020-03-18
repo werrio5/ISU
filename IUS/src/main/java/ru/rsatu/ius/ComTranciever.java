@@ -27,10 +27,10 @@ public class ComTranciever {
      */
     public static void openPort(String name) throws SerialPortException{
         serialPort = new SerialPort(name);
+        serialPort.openPort();
         serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         serialPort.setEventsMask(SerialPort.MASK_RXCHAR);
-        serialPort.addEventListener(new EventListener());
-        serialPort.openPort();
+        serialPort.addEventListener(new EventListener());        
     }
     
     /**
@@ -57,7 +57,8 @@ public class ComTranciever {
             if(event.isRXCHAR() && event.getEventValue()>=1){
                 try {
                     String buffer = serialPort.readString(1);
-                    ComLogger.logLine(buffer);                    
+                    //ComLogger.logLine(buffer);    
+                    CommandParser.receiveCommand(buffer);
                 }
                 catch (SerialPortException ex) {
                     System.out.println(ex);
