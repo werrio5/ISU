@@ -34,6 +34,11 @@ public class ParamsStorage {
 
     public static void setKp(float kp) {
         ParamsStorage.kp = kp;
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ParamsStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static float getKi() {
@@ -42,6 +47,11 @@ public class ParamsStorage {
 
     public static void setKi(float ki) {
         ParamsStorage.ki = ki;
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ParamsStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static float getKd() {
@@ -50,6 +60,11 @@ public class ParamsStorage {
 
     public static void setKd(float kd) {
         ParamsStorage.kd = kd;
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ParamsStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static byte getActive_relay() {
@@ -58,6 +73,11 @@ public class ParamsStorage {
 
     public static void setActive_relay(byte active_relay) {
         ParamsStorage.active_relay = active_relay;
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ParamsStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static byte getShutdown_temp() {
@@ -66,6 +86,11 @@ public class ParamsStorage {
 
     public static void setShutdown_temp(byte shutdown_temp) {
         ParamsStorage.shutdown_temp = shutdown_temp;
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ParamsStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static byte getTarget_temp() {
@@ -74,6 +99,11 @@ public class ParamsStorage {
 
     public static void setTarget_temp(byte target_temp) {
         ParamsStorage.target_temp = target_temp;
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ParamsStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

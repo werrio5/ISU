@@ -5,23 +5,14 @@
  */
 package ru.rsatu.ius;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
-import javax.swing.BorderFactory;
+import java.awt.Graphics;
+import java.awt.geom.Point2D;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.title.TextTitle;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import jdk.nashorn.internal.objects.Global;
 
 /**
  *
@@ -29,81 +20,57 @@ import org.jfree.data.xy.XYSeriesCollection;
  */
 public class Chart extends JFrame{
     
+    private static JPanel drawingField;
+    private static List<Integer> tempList;
+    private static List<Integer> fanList;
+    
+    static int valuesOnScreen = 500;
+    
     public Chart(JPanel panel) {
-
-        XYDataset dataset = createDataset();
-        JFreeChart chart = createChart(dataset);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        chartPanel.setBackground(Color.white);
+        drawingField = panel;
+        tempList = new LinkedList<>();
+        fanList = new LinkedList<>();
+    }
+    
+    private static void drawData(List<Integer> data, Color color){
+        int firstElementIndex = data.size() > valuesOnScreen ? data.size() - valuesOnScreen -1 : 0;
+        int visibleValuesCount = data.size() > valuesOnScreen ? valuesOnScreen : data.size();
+        //y boundaries
+        int max = 0;
+        int min = 9999;        
         
-        add(chartPanel);
-        pack();
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        for(int i=firstElementIndex; i<data.size(); i++){
+            if(data.get(i) > max) max = data.get(i);
+            if(data.get(i) < min) min = data.get(i);
+        }
+        int height = drawingField.getHeight();
+        double scale = max-min > 0 ? (double)height/(double)(max-min) : 1;
         
-        panel.add(this.getContentPane());
+        Graphics g = drawingField.getGraphics();
+        g.setColor(color);
+        
+        Point2D.Double prev = new Point2D.Double(0, data.get(firstElementIndex) * scale);
+        for(int i = 1; i<visibleValuesCount; i++){
+           Point2D.Double cur = new Point2D.Double(i, data.get(firstElementIndex+i) * scale); 
+           drawLine(g,prev,cur);
+           prev = cur;
+        }
     }
-private XYDataset createDataset() {
-
-        XYSeries series1 = new XYSeries("2014");
-        series1.add(18, 530);
-        series1.add(20, 580);
-        series1.add(25, 740);
-        series1.add(30, 901);
-        series1.add(40, 1300);
-        series1.add(50, 2219);
-
-        XYSeries series2 = new XYSeries("2016");
-        series2.add(18, 567);
-        series2.add(20, 612);
-        series2.add(25, 800);
-        series2.add(30, 980);
-        series2.add(40, 1210);
-        series2.add(50, 2350);
-
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(series1);
-        dataset.addSeries(series2);
-
-        return dataset;
+    
+    private static void drawLine(Graphics g, Point2D.Double prev, Point2D.Double cur){
+        g.drawLine((int)(prev.x), (int)(-prev.y + drawingField.getHeight()), (int)(cur.x), (int)(-cur.y + drawingField.getHeight()));
     }
-
-    private JFreeChart createChart(final XYDataset dataset) {
-
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "Average salary per age",
-                "Age",
-                "Salary (€)",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true,
-                true,
-                false
-        );
-
-        XYPlot plot = chart.getXYPlot();
-
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-
-        renderer.setSeriesPaint(0, Color.RED);
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
-        renderer.setSeriesPaint(1, Color.BLUE);
-        renderer.setSeriesStroke(1, new BasicStroke(2.0f));
-
-        plot.setRenderer(renderer);
-        plot.setBackgroundPaint(Color.white);
-        plot.setRangeGridlinesVisible(false);
-        plot.setDomainGridlinesVisible(false);
-
-        chart.getLegend().setFrame(BlockBorder.NONE);
-
-        chart.setTitle(new TextTitle("Average Salary per Age",
-                        new Font("Serif", Font.BOLD, 18)
-                )
-        );
-
-        return chart;
+    
+    public static void addData(Integer temp, Integer fan){
+        if(temp==null) tempList.add(0);
+        else tempList.add(temp);
+        
+        if(fan==null) fanList.add(0);
+        else fanList.add(fan);
+        
+        Graphics g = drawingField.getGraphics();
+        g.clearRect(0, 0, drawingField.getWidth(), drawingField.getHeight());
+        drawData(tempList, Color.red);
+        drawData(fanList, Color.blue);
     }
-
 }

@@ -5,11 +5,15 @@
  */
 package ru.rsatu.ius;
 
+import java.awt.Color;
 import java.awt.event.ItemEvent;
+import java.nio.ByteBuffer;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.border.LineBorder;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -36,23 +40,14 @@ public class MainFrame extends javax.swing.JFrame {
         KiTextField.setText(String.valueOf(ParamsStorage.getKi()));
         KdTextField.setText(String.valueOf(ParamsStorage.getKd()));
         RelayComboBox.setSelectedItem(String.valueOf(ParamsStorage.getActive_relay()));
-        ShutdownTempTextField.setText(String.valueOf(ParamsStorage.getShutdown_temp()));
-        TargetTempTextField.setText(String.valueOf(ParamsStorage.getTarget_temp()));
+        ShutdownTempTextField.setText(String.valueOf(ParamsStorage.getShutdown_temp()+128));
+        TargetTempTextField.setText(String.valueOf(ParamsStorage.getTarget_temp()+128));
         //график
         JFrame jf =  new Chart(ChartPanel);
         //логгер
         ComLogger.init(ComLogTextArea);
         //обработчик команд
-        CommandParser.init();
-        
-        
-        
-        try {
-            ComTranciever.openPort("COM3");
-        } catch (SerialPortException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        CommandParser.init();        
         String[] l = SerialPortList.getPortNames();
         for(String s:l){
             ComPortComboBox.addItem(s);
@@ -99,11 +94,15 @@ public class MainFrame extends javax.swing.JFrame {
         ApplyButton = new javax.swing.JButton();
         PowerToggleButton = new javax.swing.JToggleButton();
         RelayComboBox = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jSlider1 = new javax.swing.JSlider();
         jMenuBar1 = new javax.swing.JMenuBar();
         OpenMenuItem = new javax.swing.JMenu();
         SaveMenuItem = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        ChartPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout ChartPanelLayout = new javax.swing.GroupLayout(ChartPanel);
         ChartPanel.setLayout(ChartPanelLayout);
@@ -113,7 +112,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         ChartPanelLayout.setVerticalGroup(
             ChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 291, Short.MAX_VALUE)
+            .addGap(0, 262, Short.MAX_VALUE)
         );
 
         ComLogTextArea.setEditable(false);
@@ -128,14 +127,39 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         KpTextField.setText("jTextField1");
+        KpTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                KpTextFieldFocusLost(evt);
+            }
+        });
 
         KiTextField.setText("jTextField2");
+        KiTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                KiTextFieldFocusLost(evt);
+            }
+        });
 
         KdTextField.setText("jTextField3");
+        KdTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                KdTextFieldFocusLost(evt);
+            }
+        });
 
         TargetTempTextField.setText("jTextField4");
+        TargetTempTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TargetTempTextFieldFocusLost(evt);
+            }
+        });
 
         ShutdownTempTextField.setText("jTextField5");
+        ShutdownTempTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                ShutdownTempTextFieldFocusLost(evt);
+            }
+        });
 
         jLabel1.setText("Kp");
 
@@ -154,7 +178,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        PowerToggleButton.setText("ВКЛ");
+        PowerToggleButton.setText("ВКЛ/ВЫКЛ");
         PowerToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PowerToggleButtonActionPerformed(evt);
@@ -168,6 +192,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -178,7 +209,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(PowerToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                            .addComponent(PowerToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(ComPortComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,26 +234,33 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(TargetTempTextField)
                     .addComponent(ShutdownTempTextField)
                     .addComponent(ApplyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(87, 87, 87))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ComPortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(KpTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TargetTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(KiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2)
-                        .addComponent(ShutdownTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(PowerToggleButton)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ComPortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(KpTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TargetTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(KiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2)
+                                .addComponent(ShutdownTempTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(PowerToggleButton))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(KdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -236,6 +274,16 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuBar1.add(OpenMenuItem);
 
         SaveMenuItem.setText("Save log");
+        SaveMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SaveMenuItemMouseClicked(evt);
+            }
+        });
+        SaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveMenuItemActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(SaveMenuItem);
 
         setJMenuBar(jMenuBar1);
@@ -251,16 +299,21 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -272,18 +325,231 @@ public class MainFrame extends javax.swing.JFrame {
     private void ApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyButtonActionPerformed
         // TODO add your handling code here:
         //проверка ввода
-        //отправка команд на передачу измененных параметров
-        System.out.println("test changed");
+        if(inputCheck()){
+            //отправка команд на передачу измененных параметров
+            //kp
+            float fvalue = Float.valueOf(KpTextField.getText());
+            //новое
+            if(ParamsStorage.getKp()!= fvalue){
+                //сохранить
+                ParamsStorage.setKp(fvalue);
+                byte value[] = ByteBuffer.allocate(4).putFloat(fvalue).array();
+                byte buffer[] = new byte[10];
+                buffer[0]=(byte)0xff;   //начало кадра
+                buffer[1]=(byte)0x99;   //передача параметра
+                buffer[2]=(byte)0x00;   //ид команды (любое, пересчитывается)  
+                buffer[3]=(byte)0x33;   //ид параметра
+                buffer[4]= value[0];
+                buffer[5]= value[1];
+                buffer[6]= value[2];
+                buffer[7]= value[3];
+                buffer[8]=(byte)0x00;  //сумма (любое)
+                buffer[9]=(byte)0x81;  //конец кадра
+                //отправить
+                try {                    
+                    ComTranciever.writeCommand(buffer);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //ki
+            fvalue = Float.valueOf(KiTextField.getText());
+            //новое
+            if(ParamsStorage.getKi()!= fvalue){
+                //сохранить
+                ParamsStorage.setKi(fvalue);
+                byte value[] = ByteBuffer.allocate(4).putFloat(fvalue).array();
+                byte buffer[] = new byte[10];
+                buffer[0]=(byte)0xff;   //начало кадра
+                buffer[1]=(byte)0x99;   //передача параметра
+                buffer[2]=(byte)0x00;   //ид команды (любое, пересчитывается)  
+                buffer[3]=(byte)0x55;   //ид параметра
+                buffer[4]= value[0];
+                buffer[5]= value[1];
+                buffer[6]= value[2];
+                buffer[7]= value[3];
+                buffer[8]=(byte)0x00;  //сумма (любое)
+                buffer[9]=(byte)0x81;  //конец кадра
+                //отправить
+                try {                    
+                    ComTranciever.writeCommand(buffer);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        
+            //kd
+            fvalue = Float.valueOf(KdTextField.getText());
+            //новое
+            if(ParamsStorage.getKd()!= fvalue){
+                //сохранить
+                ParamsStorage.setKd(fvalue);
+                byte value[] = ByteBuffer.allocate(4).putFloat(fvalue).array();
+                byte buffer[] = new byte[10];
+                buffer[0]=(byte)0xff;   //начало кадра
+                buffer[1]=(byte)0x99;   //передача параметра
+                buffer[2]=(byte)0x00;   //ид команды (любое, пересчитывается)  
+                buffer[3]=(byte)0x99;   //ид параметра
+                buffer[4]= value[0];
+                buffer[5]= value[1];
+                buffer[6]= value[2];
+                buffer[7]= value[3];
+                buffer[8]=(byte)0x00;  //сумма (любое)
+                buffer[9]=(byte)0x81;  //конец кадра
+                //отправить
+                try {                    
+                    ComTranciever.writeCommand(buffer);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //tt
+            byte bvalue = (byte) (Integer.valueOf(TargetTempTextField.getText()) - 128);
+            //новое
+            if(ParamsStorage.getTarget_temp()!= bvalue){
+                //сохранить
+                ParamsStorage.setTarget_temp(bvalue);
+                byte buffer[] = new byte[7];
+                buffer[0]=(byte)0xff;   //начало кадра
+                buffer[1]=(byte)0x99;   //передача параметра
+                buffer[2]=(byte)0x00;   //ид команды (любое, пересчитывается)  
+                buffer[3]=(byte)0xAA;   //ид параметра
+                buffer[4]= (byte)((bvalue + 128) & 0xFF);
+                buffer[5]=(byte)0x00;  //сумма (любое)
+                buffer[6]=(byte)0x81;  //конец кадра
+                //отправить
+                try {                    
+                    ComTranciever.writeCommand(buffer);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //st
+            bvalue = (byte) (Integer.valueOf(ShutdownTempTextField.getText()) - 128);
+            //новое
+            if(ParamsStorage.getShutdown_temp()!= bvalue){
+                //сохранить
+                ParamsStorage.setShutdown_temp(bvalue);
+                byte buffer[] = new byte[7];
+                buffer[0]=(byte)0xff;   //начало кадра
+                buffer[1]=(byte)0x99;   //передача параметра
+                buffer[2]=(byte)0x00;   //ид команды (любое, пересчитывается)  
+                buffer[3]=(byte)0x66;   //ид параметра
+                buffer[4]= (byte)((bvalue + 128) & 0xFF);
+                buffer[5]=(byte)0x00;  //сумма (любое)
+                buffer[6]=(byte)0x81;  //конец кадра
+                //отправить
+                try {                    
+                    ComTranciever.writeCommand(buffer);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //ar
+            bvalue = Byte.valueOf(RelayComboBox.getSelectedItem().toString());
+             //новое
+            if(ParamsStorage.getActive_relay()!= bvalue){
+                //сохранить
+                ParamsStorage.setActive_relay(bvalue);
+                byte buffer[] = new byte[7];
+                buffer[0]=(byte)0xff;   //начало кадра
+                buffer[1]=(byte)0x99;   //передача параметра
+                buffer[2]=(byte)0x00;   //ид команды (любое, пересчитывается)  
+                buffer[3]=(byte)0xcc;   //ид параметра
+                buffer[4]= bvalue;
+                buffer[5]=(byte)0x00;  //сумма (любое)
+                buffer[6]=(byte)0x81;  //конец кадра
+                //отправить
+                try {                    
+                    ComTranciever.writeCommand(buffer);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        //System.out.println(newKp);
     }//GEN-LAST:event_ApplyButtonActionPerformed
 
+    /**
+     * проверка ввода
+     * @return 
+     */
+    private boolean inputCheck(){
+        boolean result = true;
+        //kp
+        try{
+            float newKp = Float.valueOf(KpTextField.getText());
+            KpTextField.setBorder(new LineBorder(Color.GRAY));
+        }
+        catch(NumberFormatException e){
+            result = false;
+            KpTextField.setBorder(new LineBorder(Color.RED));
+        };
+        //ki
+        try{
+            float newKi = Float.valueOf(KiTextField.getText());
+            KiTextField.setBorder(new LineBorder(Color.GRAY));
+        }
+        catch(NumberFormatException e){
+            result = false;
+            KiTextField.setBorder(new LineBorder(Color.RED));
+        };
+        //kd
+        try{
+            float newKd = Float.valueOf(KdTextField.getText());
+            KdTextField.setBorder(new LineBorder(Color.GRAY));
+        }
+        catch(NumberFormatException e){
+            result = false;
+            KdTextField.setBorder(new LineBorder(Color.RED));
+        };
+        //target temp
+        try{
+            byte tt = Byte.parseByte(String.valueOf(Integer.valueOf(TargetTempTextField.getText()) - 128));
+            TargetTempTextField.setBorder(new LineBorder(Color.GRAY));
+        }
+        catch(NumberFormatException e){
+            result = false;
+            TargetTempTextField.setBorder(new LineBorder(Color.RED));
+        };
+        //shutdown temp
+        try{
+            byte st = Byte.parseByte(String.valueOf(Integer.valueOf(ShutdownTempTextField.getText()) - 128));
+            ShutdownTempTextField.setBorder(new LineBorder(Color.GRAY));
+        }
+        catch(NumberFormatException e){
+            result = false;
+            ShutdownTempTextField.setBorder(new LineBorder(Color.RED));
+        };
+        
+        return result;
+    }
+    
     private void PowerToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PowerToggleButtonActionPerformed
         // TODO add your handling code here:
+        byte buffer[] = new byte[5];
+            buffer[0]=(byte)0xff;
+            buffer[1]=(byte)0x66;
+            buffer[2]=(byte)0x00;  //любое         
+            buffer[3]=(byte)0x66;  //любое 
+            buffer[4]=(byte)0x81;
+        try {
+            ComTranciever.writeCommand(buffer);
+        } catch (SerialPortException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_PowerToggleButtonActionPerformed
 
     private void ComPortComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComPortComboBoxItemStateChanged
         // TODO add your handling code here:
         if(evt.getStateChange() == ItemEvent.DESELECTED){
-            System.out.println(ComPortComboBox.getSelectedItem());
+            try {
+                System.out.println(ComPortComboBox.getSelectedItem());
+                ComTranciever.closePort();
+                ComTranciever.openPort((String)ComPortComboBox.getSelectedItem());
+            } catch (SerialPortException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_ComPortComboBoxItemStateChanged
 
@@ -293,6 +559,44 @@ public class MainFrame extends javax.swing.JFrame {
             System.out.println(RelayComboBox.getSelectedItem());
         }
     }//GEN-LAST:event_RelayComboBoxItemStateChanged
+
+    private void KpTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_KpTextFieldFocusLost
+        // TODO add your handling code here:
+        inputCheck();
+    }//GEN-LAST:event_KpTextFieldFocusLost
+
+    private void KiTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_KiTextFieldFocusLost
+        // TODO add your handling code here:
+        inputCheck();
+    }//GEN-LAST:event_KiTextFieldFocusLost
+
+    private void KdTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_KdTextFieldFocusLost
+        // TODO add your handling code here:
+        inputCheck();
+    }//GEN-LAST:event_KdTextFieldFocusLost
+
+    private void TargetTempTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TargetTempTextFieldFocusLost
+        // TODO add your handling code here:
+        inputCheck();
+    }//GEN-LAST:event_TargetTempTextFieldFocusLost
+
+    private void ShutdownTempTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ShutdownTempTextFieldFocusLost
+        // TODO add your handling code here:
+        inputCheck();
+    }//GEN-LAST:event_ShutdownTempTextFieldFocusLost
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void SaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SaveMenuItemActionPerformed
+
+    private void SaveMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SaveMenuItemMouseClicked
+        // TODO add your handling code here:
+        ComLogger.saveLogToFile();
+    }//GEN-LAST:event_SaveMenuItemMouseClicked
 
     /**
      * @param args the command line arguments
@@ -345,6 +649,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu SaveMenuItem;
     private javax.swing.JTextField ShutdownTempTextField;
     private javax.swing.JTextField TargetTempTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -353,5 +658,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSlider jSlider1;
     // End of variables declaration//GEN-END:variables
 }
