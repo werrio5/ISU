@@ -23,9 +23,11 @@ void process_button(uint8_t falling_edges);
 void led_output(void);
 void read_sensors(void);
 void pwm_output(void);	
+void message_exchange(void);	
 
 int main(void)
 {
+	uint16_t count = 500;
     init();
     while (1) 
     {
@@ -33,7 +35,7 @@ int main(void)
 		read_sensors();
 		
 		//PWM
-		pwm_output();	
+		//pwm_output();	
 			
 		//buttons input
 		uint8_t falling_edges = poll_btns();
@@ -41,8 +43,14 @@ int main(void)
 		process_button(falling_edges);
 		
 		//UART
-		//message_exchange();
-		uart_send_char();
+		count--;
+		if(count==0)
+		{
+			message_exchange();
+			count = 500;
+		}
+		
+		//uart_send_char();
 		
 		//LEDs
 		led_output();
@@ -50,7 +58,7 @@ int main(void)
 		//LCD
 		screen_output();		
 			
-		_delay_ms(10);
+		//_delay_ms(10);
     }
 }
 

@@ -45,6 +45,6 @@ void init()
 	data_init();
 	led_init();
 	lcd_init();
-	timer_init();
+	//timer_init();
 	sei();
 }

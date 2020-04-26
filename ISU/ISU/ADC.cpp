@@ -10,9 +10,9 @@
   #include <util/delay.h>
  #include "pins.h"
  
- uint8_t read_ADC(uint8_t pin);
- uint8_t calc_temp_value(uint8_t temp_v);
- float calc_fan_speed(uint8_t fan_s);
+ uint16_t read_ADC(uint8_t pin);
+ uint8_t calc_temp_value(uint16_t temp_v);
+ float calc_fan_speed(uint16_t fan_s);
  void set_cur_temp(uint8_t t);
  void set_fan_speed(float fs);
 
@@ -20,7 +20,7 @@ void adc_init(void)
 {
 	// левое смещение, 8 битный АЦП
 	// устанавливаем источник АЦП пин с номером PIN
-	ADMUX |= (0<<REFS1) | (1<<REFS0) |   (1<<ADLAR) |  (0<<MUX0); 
+	ADMUX |= (0<<REFS1) | (1<<REFS0) |   (0<<ADLAR) |  (0<<MUX0); 
 	ADCSRA |= (1<<ADEN) | // разрешение работы АЦП
 	(1<<ADSC) | // запуск АЦП
 	(1<<ADFR) | // автоматический режим АЦП
@@ -28,43 +28,36 @@ void adc_init(void)
 	// предделитель АЦП 128
 }
 
-//опрос 0 и 1 ацп
-uint16_t poll_adc(void)
-{
-	uint16_t result = 0x0000;
-	result |= (read_ADC(FAN_PWM_PIN) << 8) | read_ADC(HEATER_PWM_PIN);
-	return result;
-}
 
 //чтение значения с ацп
-uint8_t read_ADC(uint8_t channel)
+uint16_t read_ADC(uint8_t channel)
 {
 	//select pin
  	ADMUX = (ADMUX & 0xE0) | (channel & 0x1F);
 	 _delay_us(500);
 	// wait until ADC conversion is complete
-	return (uint8_t)ADCH; 
+	return (uint16_t)ADC; 
 }
 
 void read_sensors(void)
 {
-	uint8_t temp_v = read_ADC(0);
+	uint16_t temp_v = read_ADC(0);
 	uint8_t cur_temp = calc_temp_value(temp_v);
 	set_cur_temp(cur_temp);
 
 				
-	uint8_t fan_s = read_ADC(1);
+	uint16_t fan_s = read_ADC(1);
 	float cur_rpm = calc_fan_speed(fan_s);
 	set_fan_speed(cur_rpm);
 }
 
-uint8_t calc_temp_value(uint8_t temp_v)
+uint8_t calc_temp_value(uint16_t temp_v)
 {
 	uint8_t t = temp_v;
 	return t;
 }
 
-float calc_fan_speed(uint8_t fan_s)
+float calc_fan_speed(uint16_t fan_s)
 {
 	return (float) fan_s;
 }
