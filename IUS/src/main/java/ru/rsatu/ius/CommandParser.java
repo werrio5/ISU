@@ -63,6 +63,7 @@ public class CommandParser {
                     //command accepted
                     case (byte) 0xcc:
                         ComLogger.logLine("accepted");
+                        ComTranciever.unlock();
                         break;
                     //param input
                     case (byte) 0x66:

@@ -5,9 +5,10 @@
  */
 package ru.rsatu.ius;
 
-import static java.lang.Thread.sleep;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedTransferQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jssc.SerialPort;
@@ -27,7 +28,13 @@ public class ComTranciever {
     private static List<Byte> curPacket;
     private static boolean packetReady = false;
     private static boolean packetStarted = false;
-
+    
+    private static Queue<byte[]> outputCommandQueue;
+    private static byte[] prevCommand;
+    private static boolean sendLock;
+    
+    
+    
     /**
      *
      * @param name
@@ -36,6 +43,8 @@ public class ComTranciever {
     public static void openPort(String name) throws SerialPortException {
         commandCounter = 0;
         curPacket = new LinkedList<>();
+        outputCommandQueue = new LinkedTransferQueue<>();
+        sendLock = false;
         
         serialPort = new SerialPort(name);
         serialPort.openPort();
@@ -43,8 +52,8 @@ public class ComTranciever {
         serialPort.setEventsMask(SerialPort.MASK_RXCHAR);
         serialPort.addEventListener(new EventListener());
 
-        //writingThread = new WritingThread();
-        //writingThread.start();
+        writingThread = new WritingThread();
+        writingThread.start();
     }
 
     /**
@@ -69,7 +78,7 @@ public class ComTranciever {
             sum = (byte) ((sum + command[i]) % 256);
         }
         command[command.length - 2] = sum;
-        serialPort.writeBytes(command);
+        outputCommandQueue.add(command);
     }
 
     private static class EventListener implements SerialPortEventListener {
@@ -219,31 +228,27 @@ public class ComTranciever {
         }
         return length;
     }
+    
+    public static void unlock(){
+        sendLock = false;
+    }
 
     private static class WritingThread extends Thread {
 
         @Override
         public void run() {
-            byte buffer[] = new byte[5];
-            buffer[0] = (byte) 0xff;
-            buffer[1] = (byte) 0x66;
-            buffer[2] = (byte) 0x00;
-
-            buffer[3] = (byte) 0x00;
-            buffer[4] = (byte) 0x81;
-
-            while (true) {
-                try {
-                    serialPort.writeBytes(buffer);
-                } catch (SerialPortException ex) {
-                    Logger.getLogger(ComTranciever.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
-                    sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ComTranciever.class.getName()).log(Level.SEVERE, null, ex);
+            while(true){
+                if(!sendLock & outputCommandQueue.size()>0){
+                    sendLock = true;
+                    prevCommand = outputCommandQueue.poll();
+                    try {
+                        serialPort.writeBytes(prevCommand);
+                    } catch (SerialPortException ex) {
+                        Logger.getLogger(ComTranciever.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
+        
     }
 }
