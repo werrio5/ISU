@@ -53,7 +53,7 @@ void read_sensors(void)
 
 uint8_t calc_temp_value(uint16_t temp_v)
 {
-	uint8_t t = temp_v;
+	uint8_t t = temp_v/4;
 	return t;
 }
 
