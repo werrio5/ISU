@@ -35,17 +35,19 @@
 #define RS PC2
 //sensors
 #define THERMISTOR_SENSOR_PIN	PF0
-#define FAN_SPEED_SENSOR_PIN	PF1
+#define FAN_SPEED_SENSOR_PIN	PE1
 //ports
 #define LCD_PORT PORTC
 #define BTN_PORT PORTD
 #define ADC_PORT PORTF
+#define FAN_PORT PORTE
 #define PWM_PORT PORTC
 #define LED_PORT PORTA
 //ports direction
 #define LCD_PORT_DDR DDRC
 #define BTN_PORT_DDR DDRD
 #define ADC_PORT_DDR DDRF
+#define FAN_PORT_DDR DDRE
 #define PWM_PORT_DDR DDRB
 #define LED_PORT_DDR DDRA
 

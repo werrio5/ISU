@@ -46,9 +46,9 @@ void read_sensors(void)
 	set_cur_temp(cur_temp);
 
 				
-	uint16_t fan_s = read_ADC(1);
-	float cur_rpm = calc_fan_speed(fan_s);
-	set_fan_speed(cur_rpm);
+	//uint16_t fan_s = read_ADC(1);
+	//float cur_rpm = calc_fan_speed(fan_s);
+	//set_fan_speed(cur_rpm);
 }
 
 uint8_t calc_temp_value(uint16_t temp_v)

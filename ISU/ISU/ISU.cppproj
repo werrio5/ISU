@@ -164,6 +164,9 @@
     <Compile Include="init.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="interrupt.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LCD1602.cpp">
       <SubType>compile</SubType>
     </Compile>

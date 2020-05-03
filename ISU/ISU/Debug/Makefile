@@ -40,6 +40,7 @@ C_SRCS +=  \
 ../ADC.cpp \
 ../btninput.cpp \
 ../init.cpp \
+../interrupt.cpp \
 ../LCD1602.cpp \
 ../leds.cpp \
 ../main.cpp \
@@ -59,6 +60,7 @@ OBJS +=  \
 ADC.o \
 btninput.o \
 init.o \
+interrupt.o \
 LCD1602.o \
 leds.o \
 main.o \
@@ -71,6 +73,7 @@ OBJS_AS_ARGS +=  \
 ADC.o \
 btninput.o \
 init.o \
+interrupt.o \
 LCD1602.o \
 leds.o \
 main.o \
@@ -83,6 +86,7 @@ C_DEPS +=  \
 ADC.d \
 btninput.d \
 init.d \
+interrupt.d \
 LCD1602.d \
 leds.d \
 main.d \
@@ -95,6 +99,7 @@ C_DEPS_AS_ARGS +=  \
 ADC.d \
 btninput.d \
 init.d \
+interrupt.d \
 LCD1602.d \
 leds.d \
 main.d \
@@ -132,6 +137,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./init.o: .././init.cpp
+	@echo Building file: $<
+	@echo Invoking: AVR8/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-g++.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega128 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega128" -c -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./interrupt.o: .././interrupt.cpp
 	@echo Building file: $<
 	@echo Invoking: AVR8/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-g++.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega128 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega128" -c -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
